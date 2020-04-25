@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--Site Title-->
+    <title>Pete Fralick - Blog</title>
+
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image" href="Images/favicon.png">
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom fonts for this template -->
+    <link href="~/Content/all.min.css" rel="stylesheet" />
+
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="~/Content/clean-blog.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+            @*<a class="navbar-brand" href="index.html">Start Bootstrap</a>*@
+            @*<a href="#" class="navbar-brand"><img src="Imgages/favicon.png" alt="">Peter Fralick</a>*@
+            @Html.ActionLink(" ", "Index", "Home", null, new { @class = "navbar-brand" })
+            <img src="~/Images/favicon.png" />
+
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        @*<a class="nav-link" href="index.html">Home</a>*@
+                        @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
+                    </li>
+                    @*<li class="nav-item">
+                <a class="nav-link" href="about.html">About</a>
+                </li>*@
+                <li class="nav-item">
+                    @*<a class="nav-link" href="post.html">Sample Post</a>
+                    @Html.ActionLink("Sample Post", "Details", "BlogPosts", new { id = 1 }, new { @class = "nav-link" })*@
+                    @Html.ActionLink("Sample Post", "Details", "BlogPosts", new { slug = 1 }, new { @class = "nav-link" })
+                </li>
+                    
+                    <li class="nav-item">
+                        @Html.ActionLink("List", "index", "BlogPosts", null, new { @class = "nav-link" })
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Create Post", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                    </li>
+
+                    @*I need to tell this link to show itself if and only if you're logged in as an admin*@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            @*<a class="nav-link" href="post.html">Sample Post</a>*@
+                            @Html.ActionLink("Welcome Admin - Create Post", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                        </li>
+                    }
+                    @*<li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>*@
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+
+
+    @RenderBody()
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <ul class="list-inline text-center">
+                        <li class="list-inline-item">
+                            <a href="//twitter.com/PFWebDev" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="//www.linkedin.com/in/peter-fralick-7332402" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-linkedin-in fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="//github.com/pfralick" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted">Copyright &copy; Peter Fralick 2020</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom scripts for this template -->
+    <script src="~/Scripts/clean-blog.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+
+</html>
