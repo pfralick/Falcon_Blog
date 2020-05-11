@@ -45,7 +45,7 @@ namespace Falcon_Blog
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
-            // Uncomment the following lines to enable logging in with third party login providers
+            //Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
             //    clientSecret: "");
@@ -54,15 +54,15 @@ namespace Falcon_Blog
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "2604607373111880",
+               appSecret: "70da3da1a7911c5280d137396a42d243");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "556080477038-umei7q0ut0eg6h0p3apkb4rq7sui469a.apps.googleusercontent.com",
+                ClientSecret = "gZpbpzUmSEtmPtmS64dKCySN"
+            });
         }
     }
 }

@@ -50,41 +50,22 @@ namespace Falcon_Blog.Migrations
             var userStore = new UserStore<ApplicationUser>(context);
             var userManager = new UserManager<ApplicationUser>(userStore);
 
-            if (!context.Users.Any(u => u.Email == "fralick3@hotmail.com"))
+            if (!context.Users.Any(u => u.Email == "pf@hotmail.com"))
             {
                 var user = new ApplicationUser
                 {
-                    UserName = "fralick3@hotmail.com",
-                    Email = "fralick3@hotmail.com",
-                    FirstName = "Pete",
+                    UserName = "pf@hotmail.com",
+                    Email = "pf@hotmail.com",
+                    FirstName = "Peter",
                     LastName = "Fralick",
                     DisplayName = "Admin"
                 };
 
-                //This line creaes the User in the DB
+                //This line creaes the User in the DB, password
                 userManager.Create(user, "Abc&123!");
 
                 //This line attaches the Role of Admin to this specific user
                 userManager.AddToRoles(user.Id, "Admin");
-            }
-
-            if (!context.Users.Any(u => u.Email == "petefralick3@gmail.com"))
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = "petefralick3@gmail.com",
-                    Email = "petefralick3@gmail.com",
-                    FirstName = "Pete",
-                    LastName = "Fralick",
-                    DisplayName = "Admin"
-                };
-
-                //This line creaes the User in the DB
-                userManager.Create(user, "Abc&123#");
-
-                //This line attaches the Role of Admin to this specific user
-                userManager.AddToRoles(user.Id, "Admin");
-
             }
 
             if (!context.Users.Any(u => u.Email == "ARussell@coderfoundry.com"))

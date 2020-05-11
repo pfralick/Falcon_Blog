@@ -2,25 +2,71 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Falcon_Blog.Helpers;
 using Falcon_Blog.Models;
+using PagedList;
+using PagedList.Mvc;
 
 namespace Falcon_Blog.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [RequireHttps]
+    //I'm telling this action not to let anyone in unless they are an admin.
+    [Authorize(Roles = "Admin, Moderator")]
     public class BlogPostsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        //private SearchHelper foo = new SearchHelper();
+
         // GET: BlogPosts
-        public ActionResult Index()
+        [AllowAnonymous]
+        public ActionResult Index(int? page, string searchStr)
         {
-            return View(db.BlogPosts.ToList());
+            ViewBag.Search = searchStr;
+            var blogList = IndexSearch(searchStr);
+
+            int pageSize = 3; //display three blog posts at a time on this page
+            int pageNumber = (page ?? 1);
+            return View(blogList.OrderByDescending(b => b.Created).ToPagedList(pageNumber, pageSize));
+
+            var listPosts = db.BlogPosts.AsQueryable();
+            return View(listPosts.OrderByDescending(p => p.Created).ToPagedList(pageNumber, pageSize));
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Contact(EmailModel model)
+
+
+        public IQueryable<BlogPost> IndexSearch(string searchStr)
+        {
+            IQueryable<BlogPost> result = null;
+            if (searchStr != null)
+            {
+                result = db.BlogPosts.AsQueryable();
+                result = result.Where(p => p.Title.Contains(searchStr) ||
+                                    p.Body.Contains(searchStr) ||
+                                    p.Comments.Any(c => c.Body.Contains(searchStr) ||
+                                                    c.Author.FirstName.Contains(searchStr) ||
+                                                    c.Author.LastName.Contains(searchStr) ||
+                                                    c.Author.DisplayName.Contains(searchStr) ||
+                                                    c.Author.Email.Contains(searchStr)));
+            }
+            else
+            {
+                result = db.BlogPosts.AsQueryable();
+            }
+            return result.OrderByDescending(p => p.Created);
+        }
+
+
+
 
         // GET: BlogPosts/Details/5
         /*public ActionResult Details(int? id)
@@ -37,7 +83,7 @@ namespace Falcon_Blog.Controllers
             return View(blogPost);
         }*/
 
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public ActionResult Details(string Slug)
         {
             if (String.IsNullOrWhiteSpace(Slug))
@@ -56,22 +102,15 @@ namespace Falcon_Blog.Controllers
         public ActionResult Create()
         {
             return View();
-        }
+        }       
 
-        //I am telling this action not to let anyone in unless they are an admin.
-        //[Authorize(Roles ="Admin")]
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
 
         // POST: BlogPosts/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public ActionResult Create([Bind(Include = "Id,Created,Updated,Title,Slug,Abstract,Body,MediaUrl,Published")] BlogPost blogPost) //new blog post entered into blogPost var
+        public ActionResult Create([Bind(Include = "Id,Created,Updated,Title,Slug,Abstract,Body,MediaUrl,Published")] BlogPost blogPost, HttpPostedFileBase image) //new blogPost var for BlogPost class
         {
             if (ModelState.IsValid)
             {
@@ -88,11 +127,18 @@ namespace Falcon_Blog.Controllers
                 }
 
                 //Second: We have to make sure this slug has not already been used on a previous BlogPost
-                if(db.BlogPosts.Any(b => b.Slug == slug))
+                if (db.BlogPosts.Any(b => b.Slug == slug))
                 {
                     //I can also display custom errors using the ValidationSummary by leaving the first set of quotes empty
                     ModelState.AddModelError("", $"Oops, the Title: '{blogPost.Title}' has been used before");
                     return View(blogPost);
+                }
+
+                if (ImageUploadValidator.IsWebFriendlyImage(image))
+                {
+                    var fileName = Path.GetFileName(image.FileName);
+                    image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                    blogPost.MediaUrl = "/Uploads/" + fileName;
                 }
 
                 //I want to make sure my blogPost.Slug assignment happens inside the if statement
@@ -142,10 +188,21 @@ namespace Falcon_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Created,Updated,Title,Slug,Abstract,Body,MediaUrl,Published")] BlogPost blogPost)
+        public ActionResult Edit([Bind(Include = "Id,Created,Updated,Title,Slug,Abstract,Body,MediaUrl,Published")]  BlogPost blogPost, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
+                blogPost.Updated = DateTime.Now;
+                var bpId = blogPost.Id;
+                var oldPost = db.BlogPosts.AsNoTracking().FirstOrDefault(b => b.Id == bpId);
+                blogPost.Created = oldPost.Created;
+                if (ImageUploadValidator.IsWebFriendlyImage(image))
+                {
+                    var fileName = Path.GetFileName(image.FileName);
+                    image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                    blogPost.MediaUrl = "/Uploads/" + fileName;
+                }                          
+                
                 db.Entry(blogPost).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

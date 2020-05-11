@@ -12,7 +12,7 @@
     <title>Pete Fralick - Blog</title>
 
     <!-- favicon -->
-    <link rel="shortcut icon" type="image" href="Images/favicon.png">
+    <link rel="shortcut icon" type="image" href="~/Images/PFicon.png">
 
     <!-- Bootstrap core CSS -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
@@ -25,6 +25,7 @@
 
     <!-- Custom styles for this template -->
     <link href="~/Content/clean-blog.min.css" rel="stylesheet" />
+    <link href="~/Content/custom.css" rel="stylesheet" />
 
 </head>
 
@@ -33,10 +34,10 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
         <div class="container">
-            @*<a class="navbar-brand" href="index.html">Start Bootstrap</a>*@
             @*<a href="#" class="navbar-brand"><img src="Imgages/favicon.png" alt="">Peter Fralick</a>*@
-            @Html.ActionLink(" ", "Index", "Home", null, new { @class = "navbar-brand" })
-            <img src="~/Images/favicon.png" />
+            <a href='@Url.Action("Index", "Home")'>
+                <img src='@Url.Content("~/Images/PFicon.png")' />
+            </a>
 
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
@@ -49,46 +50,83 @@
                         @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
                     </li>
                     @*<li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
-                </li>*@
-                <li class="nav-item">
-                    @*<a class="nav-link" href="post.html">Sample Post</a>
-                    @Html.ActionLink("Sample Post", "Details", "BlogPosts", new { id = 1 }, new { @class = "nav-link" })*@
-                    @Html.ActionLink("Sample Post", "Details", "BlogPosts", new { slug = 1 }, new { @class = "nav-link" })
-                </li>
-                    
+        <a class="nav-link" href="about.html">About</a>
+        </li>*@
+                    <li class="nav-item">
+                        @*<a class="nav-link" href="post.html">Sample Post</a>
+            @Html.ActionLink("Sample Post", "Details", "BlogPosts", new { id = 1 }, new { @class = "nav-link" })*@
+                        @*@Html.ActionLink("Sample Post", "Details", "BlogPosts", new { slug = 1 }, new { @class = "nav-link" })*@
+                    </li>
+
                     <li class="nav-item">
                         @Html.ActionLink("List", "index", "BlogPosts", null, new { @class = "nav-link" })
                     </li>
 
                     <li class="nav-item">
-                        @Html.ActionLink("Create Post", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                        @Html.ActionLink("Create", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })
                     </li>
 
                     @*I need to tell this link to show itself if and only if you're logged in as an admin*@
                     @if (User.IsInRole("Admin"))
                     {
+                        //<li class="nav-item">
+                            //@*<a class="nav-link" href="post.html">Sample Post</a>*@
+                            //@Html.ActionLink("Welcome", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                        //</li>
                         <li class="nav-item">
                             @*<a class="nav-link" href="post.html">Sample Post</a>*@
-                            @Html.ActionLink("Welcome Admin - Create Post", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                            @Html.ActionLink("Comments", "Index", "Comments", null, new { @class = "nav-link" })
                         </li>
+
+
                     }
+
                     @*<li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>*@
+            <a class="nav-link" href="contact.html">Contact</a>
+        </li>*@
                 </ul>
                 @Html.Partial("_LoginPartial")
+
+                @*<div class="nav-item">
+                    <a class="active" href="#">
+                        <div class="search-container">
+                            <form action="">
+                                <input id=searchStr" type="text" placeholder="Search.." name="search">
+                                <button type="submit"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                </div>*@
+
+
+                @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "form" }))
+                {
+                <div class="controls controls-row search-row">
+                    <input id="searchStr" name="searchStr" class="input-block-level" type="text"
+                           placeholder="Search">
+                    <button id="searchStr" name="searchStr" class="button button1" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                }
+
+
+
             </div>
         </div>
     </nav>
 
 
     @RenderBody()
-
+        
     <hr>
 
     <!-- Footer -->
     <footer>
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
@@ -127,7 +165,7 @@
     <!-- Bootstrap core JavaScript -->
     <script src="~/Scripts/jquery.min.js"></script>
     <script src="~/Scripts/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Custom scripts for this template -->
     <script src="~/Scripts/clean-blog.min.js"></script>
 

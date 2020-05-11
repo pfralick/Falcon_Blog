@@ -5,23 +5,27 @@
 }
 
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('/Images/home-bg.jpg')">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <div class="site-heading">
-                    <h2>A Blog Website by Peter Fralick</h2>
-                    <span class="subheading"></span>
+    <header class="masthead" style="background-image: url('/Images/geoffrey-baumbach-LCcEuOnqytY-unsplash.jpg')">
+      <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h2>A .NET Blog by Peter Fralick</h2>
+                        <span class="subheading"></span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 
 <h2>Create</h2>
+<div class="clearfix">
+    <a class="btn btn-primary float-left" href='@Url.Action("Index", "BlogPosts")'>List &rarr;</a>
+</div>
 
-@using (Html.BeginForm())
+@*@using (Html.BeginForm())*@
+@using (Html.BeginForm("Create", "BlogPosts", FormMethod.Post, new {  enctype = "Multipart/form-data"}))
 {
     @Html.AntiForgeryToken()
 
@@ -84,8 +88,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.MediaUrl, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.MediaUrl, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MediaUrl, "", new { @class = "text-danger" })
+                <input name="image" type="file" class="form-control" id="fileUpload" />
+                @*@Html.EditorFor(model => model.MediaUrl, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MediaUrl, "", new { @class = "text-danger" })*@
             </div>
         </div>
 
@@ -119,7 +124,8 @@
     <script type="text/javascript">
         $(function () {
             tinymce.init({
-            selector: '#Body'
+            selector: '#Body',
+            branding: false
             });
             });
     </script>

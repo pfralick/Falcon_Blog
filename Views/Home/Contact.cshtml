@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h2>A Blog Website by Peter Fralick</h2>
+                    <h2>A .NET blog by Peter Fralick</h2>
                     <span class="subheading"></span>
                 </div>
             </div>
@@ -13,17 +13,58 @@
     </div>
 </header>
 
+@model Falcon_Blog.Models.EmailModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <h4>Thanks for visiting. You can send me a message anytime.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.FromName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FromName, new { @class = "form-control", placeholder = "name" })
+            @Html.ValidationMessageFor(m => m.FromName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.FromEmail, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FromEmail, new { @class = "form-control", placeholder = "example@email.com" })
+            @Html.ValidationMessageFor(m => m.FromEmail)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Body, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Body, new { @class = "form-control", placeholder = "Type your message here." })
+            @Html.ValidationMessageFor(m => m.FromEmail)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary" value="Send" />
+        </div>
+    </div>
+}
+
+
 @{
     ViewBag.Title = "Contact";
 }
 <h2>@ViewBag.Title.</h2>
 @*<h3>@ViewBag.Message</h3>*@
 
+
+<img class="img-responsive" img src="~/Images/PFCycling.png" width="350" height="200" alt="" />
+
+
 <address>
     Peter Fralick<br />
     PO Box 1164<br />
     Avon, CO 81620<br />
-    <abbr title="Phone">P:</abbr>
+    <abbr title="Phone"></abbr>
     970-470-3233
 </address>
 

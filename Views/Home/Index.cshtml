@@ -2,14 +2,15 @@
 @model IEnumerable<BlogPost>
 
 
+
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('/Images/July4,2010JennyLake.jpg')">
+<header class="masthead" style="background-image: url('/Images/david-ballew-tSsLjyDYs44-unsplash.jpg')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <div class="site-heading">          
-                    <h2>A Blog Website by Peter Fralick</h2>
+                <div class="site-heading">
+                    <h2>A .NET Blog by Peter Fralick</h2>
                     <span class="subheading"></span>
                 </div>
             </div>
@@ -36,6 +37,11 @@
                         <h3 class="post-subtitle">
                             @post.Abstract
                         </h3>
+                        
+                        @if (post.MediaUrl != null)
+                        {
+                            <img class="img-responsive" src="@post.MediaUrl" width="250" height="136" alt="" />
+                        }
                     </a>
                     <p class="post-meta">
                         Posted by
@@ -46,7 +52,6 @@
             }
             <hr>
 
-            <hr>
             <!-- Pager -->
             <div class="clearfix">
                 <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
@@ -54,3 +59,6 @@
         </div>
     </div>
 </div>
+
+
+

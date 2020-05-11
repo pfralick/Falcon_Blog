@@ -1,0 +1,44 @@
+﻿
+h2:hover {
+    text-decoration: none;
+}
+
+
+a#loginLink, #registerLink {
+    color: #ffffff;
+    font-size: 12px;
+    padding: 10px 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+}
+
+#logoutForm {
+    color: black !important;
+    font-size: 13px;
+    padding-top: 0px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    text-decoration: none;
+}
+
+    a#loginLink:hover, a#registerLink:hover, #logoutForm:hover {
+        color: rgba(255,255,255,.8);
+        text-decoration: none;
+    }
+
+    p {
+        margin: 0px;
+    }
+
+
+
+
+
+
+
+
+

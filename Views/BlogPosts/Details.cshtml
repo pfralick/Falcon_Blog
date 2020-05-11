@@ -2,7 +2,7 @@
 @model BlogPost
     
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('/Images/MtnBikeTrailGrass.png')">
+    <header class="masthead" style="background-image: url('/Images/david-ballew-tSsLjyDYs44-unsplash.jpg')">
         <div class="overlay"></div>
         <div class="container">
             <div class="row">
@@ -26,9 +26,64 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                @Model.Body
+                @Html.Raw(Model.Body)
+            </div>
 
+            @if (Model.MediaUrl != null)
+            {
+                <img class="img-responsive" src="@Model.MediaUrl" width="350" height="236" alt="" />
+            }
+
+            <div class="post-comments">
+                <header>
+                    <h3 class="h6">Post Comments<span class="no-of-comments">(@Model.Comments.Count())</span></h3>
+                </header>
+
+
+                @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created).ToList())
+                {
+                    var name = $"{comment.Author.LastName}, {comment.Author.FirstName}";
+
+                    <div class="comment">
+                        <div class="comment-header d-flex justify-content-between">
+                            <div class="user d-flex align-items-center">
+                                @*<div class="card-title"><strong>@name</strong><span class="date">@comment.Created.ToString</span></div>*@
+                                <h4>@comment.Body</h4>
+                                <h4>@comment.Created</h4>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+
+
+
+                <header>
+                    <h3 class="h6">Leave a comment</h3>
+                </header>
+
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    using (Html.BeginForm("Create", "Comments", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("BlogPostId", Model.Id)
+                        @Html.HiddenFor(model => model.Slug)
+
+                        @Html.TextArea("CommentBody", new { rows = 5, cols = 50 })
+                        <div>
+                            <button type="submit" class="btn btn-dark">submit</button>
+                        </div>
+                    }
+                }
+                else if (!User.Identity.IsAuthenticated)
+                {
+                    <p>You must be logged in to leave a comment.</p>
+                }
             </div>
         </div>
-    </div>
 </article>
+
+
